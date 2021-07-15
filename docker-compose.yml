@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  mySql:
+    image: 'mysql:latest'
+    restart: always
+    env_file:
+      - ./docker_env/db.env
+    volumes:
+      - data:/var/lib/mysql
+  tour:
+    build: ./
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    volumes:
+      - applogs:/logs/app.log
+      - errlogs:/logs/err.log
+      - ./:/app
+      - /app/node_modules
+    restart: on-failure  
+    depends_on:
+      - mySql                              
+volumes:
+    data:
+    applogs:
+    errlogs:
