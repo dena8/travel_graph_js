@@ -13,16 +13,28 @@ app.use(Sentry.Handlers.requestHandler());
 
 
 require("./config/express")(app);
-require("./config/routes")(app);
+ // require("./config/routes")(app);
 require("./config/cloudinary");
 require('./scheduling/shcedule')
 require('./scheduling/clearLogs')
 
 
+const { graphqlHTTP } = require('express-graphql');
+const {GraphQLSchema} = require('graphql');
 
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to application." });
-});
+const queryType = require('./graphql/query')
+
+ // Define the Schema
+ const schema = new GraphQLSchema({ query: queryType });
+
+ //Setup the nodejs GraphQL server
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  graphiql: true,
+}));
+
+
+
 
 app.use(Sentry.Handlers.errorHandler());
 
