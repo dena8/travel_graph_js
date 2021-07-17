@@ -5,36 +5,18 @@ const port = process.env.PORT;
 const customError = require("./error/custom_error");
 const invalidCredentials = require("./error/invalid_user_or_password");
 const Sentry = require('@sentry/node');
-var path = require('path')
-require('./config/mysql')
+require('./config/mysql');
 
 Sentry.init({ dsn: process.env.SENTRY_DNS});
 app.use(Sentry.Handlers.requestHandler());
 
 
 require("./config/express")(app);
- // require("./config/routes")(app);
 require("./config/cloudinary");
-require('./scheduling/shcedule')
-require('./scheduling/clearLogs')
+require('./scheduling/shcedule');
+require('./scheduling/clearLogs');
 
-
-const { graphqlHTTP } = require('express-graphql');
-const {GraphQLSchema} = require('graphql');
-
-const queryType = require('./graphql/query')
-
- // Define the Schema
- const schema = new GraphQLSchema({ query: queryType });
-
- //Setup the nodejs GraphQL server
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  graphiql: true,
-}));
-
-
-
+require('./config/graphQl')(app);
 
 app.use(Sentry.Handlers.errorHandler());
 
