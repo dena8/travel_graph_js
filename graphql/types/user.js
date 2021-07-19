@@ -16,7 +16,8 @@ const {
       username: { type: GraphQLString },
       password: { type: GraphQLString },
       email: { type: GraphQLString },
-      authority:{type:authorityType}      
+      authority:{type:authorityType},
+      createdAt:{type:GraphQLString}      
     },
   });
   

@@ -9,6 +9,7 @@ const {
 const { userType, authorityType } = require('../../types/index');
 const userInputType = require('../../types/input_type/inputUserType');
 const { User, Authority } = require('../../../model/index');
+const initAuthorities = require('../../../util/initialAuthoritiesSetup');
 
 module.exports = {
   addUser: {
