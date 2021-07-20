@@ -7,7 +7,7 @@ const {
 } = require("graphql");
 
 const { userType, authorityType } = require('../../types/index');
-const userInputType = require('../../types/input_type/inputUserType');
+const inputUserType = require('../../types/input_type/inputUserType');
 const { User, Authority } = require('../../../model/index');
 const initAuthorities = require('../../../util/initialAuthoritiesSetup');
 
@@ -15,7 +15,7 @@ module.exports = {
   addUser: {
     type: userType,
     args: {
-      input: { type: userInputType },
+      input: { type: inputUserType },
     },
     resolve: async function (source, args) {
       const { username, password, email } = args.input;

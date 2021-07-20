@@ -2,7 +2,7 @@ const {
     GraphQLObjectType,  
   } = require("graphql");
   
-  const fields = require('./fields/mutation_fields/user')
+  const fields = require('./fields/mutation_fields/index');
   
   const mutationType = new GraphQLObjectType({
     name: "Mutation",

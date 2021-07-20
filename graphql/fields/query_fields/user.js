@@ -7,7 +7,7 @@ const {
 } = require("graphql");
 const userType = require("../../types/user");
 
-const { User, Authority } = require("../../../model/index");
+const { User, Authority, Tour } = require("../../../model/index");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -25,10 +25,11 @@ module.exports = {
       id: { type: GraphQLID },
     },
     resolve: async function (root, args, context) {
-      const { id } = args;
+      const { id } = args;       
+
       return await User.findOne({
         where: { id },
-        include: [{ model: Authority, as: "authority" }],
+        include: [{ model: Authority, as: "authority" },{model: Tour, as: "cart"}],
       });
     },
   },
