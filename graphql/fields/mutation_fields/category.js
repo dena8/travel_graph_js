@@ -6,6 +6,7 @@ const {
     GraphQLList,
   } = require("graphql");
 
+  const asyncHandler = require('express-async-handler');
   const {categoryType} = require('../../types/index');
   const inputCategoryType = require('../../types/input_type/inputCategoryType');
   const Category = require('../../../model/category');
@@ -17,11 +18,11 @@ const {
           args:{
               input:{type:inputCategoryType}
           },
-          resolve: async function(root,args){
+          resolve:asyncHandler(async function(root,args){
               const{name} = args.input;
               const category = await Category.create({ name });
               return category;             
-          }
+          })
       }
       
   }

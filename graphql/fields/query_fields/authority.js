@@ -6,24 +6,32 @@ const {
   GraphQLList,
 } = require("graphql");
 
+const asyncHandler = require('express-async-handler');
+const { errorName } = require("../../../error/graphql/error_constant");
 const { authorityType } = require("../../types/index");
 const Authority = require("../../../model/authority");
 
 module.exports = {
   authorities: {
     type: new GraphQLList(authorityType),
-    resolve: async function () {
+    resolve:asyncHandler(async function () {
       return await Authority.findAll();
-    },
+    }),
   },
   authority: {
     type: authorityType,
     args: {
       authority: { type: GraphQLID },
     },
-    resolve: async function (args) {
+    resolve:asyncHandler( async function (args) {
       const { authority } = args;
-      return await Authority.findOne({ where: { authority } });
-    },
+      const authorityEntity = await Authority.findOne({ where: { authority } });
+
+      if (authorityEntity == null) {
+        throw new Error(errorName.NOTFOUND);
+      }
+      return authorityEntity;
+
+    }),
   },
 };

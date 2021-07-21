@@ -13,7 +13,9 @@ const inputTourType = require("../../types/input_type/inputTourType");
 const cloudinary = require("cloudinary").v2;
 const {Tour,Category} =require('../../../model/index');
 const getCurrentUser = require('../../../util/currentUser');
-const inputDeleteTourType = require('../../types/input_type/inputDeleteTourType')
+const inputDeleteTourType = require('../../types/input_type/inputDeleteTourType');
+const {errorName} =require('../../../error/graphql/error_constant');
+const asyncHandler = require('express-async-handler');
 
 module.exports = {
   addTour: {
@@ -21,7 +23,7 @@ module.exports = {
     args: {
       input: { type: inputTourType },
     },
-    resolve: async function ({req},args) {
+    resolve:asyncHandler( async function ({req},args) {
       const {
         name,
         description,
@@ -59,7 +61,7 @@ module.exports = {
             creatorId: currentUserId,            
           });
           return tour;
-    },
+    }),
     
   },
   deleteTour:{
@@ -67,10 +69,10 @@ module.exports = {
     args:{
       input:{type:inputDeleteTourType}
     },
-    resolve:async function(root,args){
+    resolve:asyncHandler( async function(root,args){
       const {id} = args.input;
-      const tour= await Tour.destroy({ where: { id } }); 
+      const tour= await Tour.destroy({ where: { id } });     
       return !!tour;
-    }
+    })
   }
 };

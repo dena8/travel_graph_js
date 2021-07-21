@@ -6,6 +6,7 @@ const {
   GraphQLID,
 } = require("graphql");
 
+const asyncHandler = require('express-async-handler');
 const { userType, authorityType } = require('../../types/index');
 const inputUserType = require('../../types/input_type/inputUserType');
 const { User, Authority } = require('../../../model/index');
@@ -17,7 +18,7 @@ module.exports = {
     args: {
       input: { type: inputUserType },
     },
-    resolve: async function (source, args) {
+    resolve:asyncHandler( async function (source, args) {
       const { username, password, email } = args.input;
       if (await ((await Authority.count()) == 0)) {
         initAuthorities();
@@ -34,7 +35,7 @@ module.exports = {
         email,
         authorityId: authority.id,
       });
-    },
+    }),
   },
 };
 

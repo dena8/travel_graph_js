@@ -5,33 +5,44 @@ const {
   GraphQLInt,
   GraphQLList,
 } = require("graphql");
-const userType = require("../../types/user");
 
+const asyncHandler = require("express-async-handler");
+const { errorName } = require("../../../error/graphql/error_constant");
+const userType = require("../../types/user");
 const { User, Authority, Tour } = require("../../../model/index");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
   users: {
     type: new GraphQLList(userType),
-    resolve: async function () {
+    resolve: asyncHandler(async function () {
       return await User.findAll({
         include: [{ model: Authority, as: "authority" }],
       });
-    },
+    }),
   },
   user: {
     type: userType,
     args: {
       id: { type: GraphQLID },
     },
-    resolve: async function (root, args, context) {
-      const { id } = args;       
+    resolve: asyncHandler(async function (root, args, context) {
+      const { id } = args;
 
-      return await User.findOne({
+      const user = await User.findOne({
         where: { id },
-        include: [{ model: Authority, as: "authority" },{model: Tour, as: "cart"}],
+        include: [
+          { model: Authority, as: "authority" },
+          { model: Tour, as: "cart" },
+        ],
       });
-    },
+
+      if (user == null) {
+        throw new Error(errorName.NOTFOUND);
+      }
+
+      return user;
+    }),
   },
   login: {
     type: userType,
@@ -39,18 +50,16 @@ module.exports = {
       username: { type: GraphQLString },
       password: { type: GraphQLString },
     },
-    resolve: async function ({ res }, args) {
+    resolve: asyncHandler(async function ({ res }, args) {
       const { username, password } = args;
-      console.log(username, password);
       const user = await User.findOne({ where: { username } });
-      console.log(user);
 
       if (user == null) {
-        throw new credentialsError("Invalid credentials", 500);
+        throw new Error(errorName.CREDENTIALS_ERROR);
       }
       const comparePass = await User.comparePassword(password, user);
       if (!comparePass) {
-        throw new credentialsError("Invalid credentials", 500);
+        throw new Error(errorName.CREDENTIALS_ERROR);
       }
 
       const userAuthority = await Authority.findOne({
@@ -65,6 +74,6 @@ module.exports = {
       res.set("Access-Control-Expose-Headers", "Authorization");
       // console.log("Bearer ", token);
       return user;
-    },
+    }),
   },
 };
