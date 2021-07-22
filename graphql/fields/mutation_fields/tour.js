@@ -7,6 +7,7 @@ const {
   GraphQLBoolean
 } = require("graphql");
 
+const { isAuth, hasRole } = require("../../../auth/index");
 const tourType = require("../../types/tour");
 const inputTourType = require("../../types/input_type/inputTourType");
 
@@ -24,6 +25,9 @@ module.exports = {
       input: { type: inputTourType },
     },
     resolve:asyncHandler( async function ({req},args) {
+      isAuth(req);   
+      await hasRole('GUIDE_ROLE',req);
+
       const {
         name,
         description,
@@ -69,7 +73,10 @@ module.exports = {
     args:{
       input:{type:inputDeleteTourType}
     },
-    resolve:asyncHandler( async function(root,args){
+    resolve:asyncHandler( async function({req},args){
+      isAuth(req);   
+      await hasRole('ADMIN_ROLE',req);
+      
       const {id} = args.input;
       const tour= await Tour.destroy({ where: { id } });     
       return !!tour;

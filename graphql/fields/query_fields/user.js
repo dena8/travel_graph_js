@@ -6,6 +6,7 @@ const {
   GraphQLList,
 } = require("graphql");
 
+const {isAuth,hasRole} = require('../../../auth/index');
 const asyncHandler = require("express-async-handler");
 const { errorName } = require("../../../error/graphql/error_constant");
 const userType = require("../../types/user");
@@ -15,7 +16,9 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   users: {
     type: new GraphQLList(userType),
-    resolve: asyncHandler(async function () {
+    resolve: asyncHandler(async function ({req}) {
+      isAuth(req);   
+      await hasRole('ADMIN_ROLE',req);
       return await User.findAll({
         include: [{ model: Authority, as: "authority" }],
       });
@@ -26,7 +29,9 @@ module.exports = {
     args: {
       id: { type: GraphQLID },
     },
-    resolve: asyncHandler(async function (root, args, context) {
+    resolve: asyncHandler(async function ({req}, args, context) {
+      isAuth(req);  
+
       const { id } = args;
 
       const user = await User.findOne({
@@ -72,7 +77,7 @@ module.exports = {
       );
       res.set("Authorization", token);
       res.set("Access-Control-Expose-Headers", "Authorization");
-      // console.log("Bearer ", token);
+       console.log("Bearer ", token);
       return user;
     }),
   },
