@@ -28,9 +28,9 @@ module.exports = {
     args: {
       id: { type: GraphQLID },
     },
-    resolve: asyncHandler(async function ({ req }, args) {
+    resolve: asyncHandler(async function (parent, args, context, info) {
       const { id } = args;
-      isAuth(req);
+      isAuth(context.authHeader);
 
       const tour = await Tour.findOne({
         where: { id },

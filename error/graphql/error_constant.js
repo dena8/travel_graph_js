@@ -1,7 +1,8 @@
 const errorName = {
       NOTFOUND:'NOTFOUND',
       CREDENTIALS_ERROR:'CREDENTIALS_ERROR',
-      UNAUTHORIZED:'UNAUTHORIZED'
+      UNAUTHORIZED:'UNAUTHORIZED',
+      CATEGORY_NOT_EXIST:'CATEGORY_NOT_EXIST'
 }
 
 const errorType ={
@@ -16,6 +17,10 @@ const errorType ={
     UNAUTHORIZED:{
         message:'Unauthorized',
         statusCode: 401
+    },
+    CATEGORY_NOT_EXIST:{
+        message:'Category not exist. Please create',
+        statusCode:404
     }   
 
 }

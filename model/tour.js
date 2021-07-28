@@ -31,4 +31,5 @@ Tour.belongsTo(Category,{
   foreignKey:'categoryId',
   as:'category'
 })
+
 module.exports = Tour;

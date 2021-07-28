@@ -9,7 +9,7 @@ const {
   GraphQLFloat,
 } = require("graphql");
 
-
+const Date = require('./scalar_type/dateType')
 const categoryType = require("./category");
 
 module.exports = new GraphQLObjectType({
@@ -26,6 +26,8 @@ module.exports = new GraphQLObjectType({
     price: { type: GraphQLFloat },
     enabled: { type: GraphQLBoolean },
     startDate: { type: GraphQLString },
-    creatorId: {type: GraphQLID},
+    creator: {type: GraphQLID},
+    createdAt: { type: Date },
+      updatedAt:{type:Date}
   }),
 });

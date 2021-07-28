@@ -5,8 +5,10 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLInputObjectType,
+  GraphQLScalarType
 } = require("graphql");
 
+const Date = require('./scalar_type/dateType')
 const authorityType = require("../types/authority");
 const tourType = require("./tour");
 
@@ -19,7 +21,8 @@ module.exports=  new GraphQLObjectType({
       email: { type: GraphQLString },
       authority: { type: authorityType },
       cart: { type: GraphQLList(tourType) },
-      createdAt: { type: GraphQLString },
+      createdAt: { type: Date },
+      updatedAt:{type:Date}
     }),
   });
 

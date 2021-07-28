@@ -26,8 +26,8 @@ module.exports = {
     args: {
       authority: { type: GraphQLID },
     },
-    resolve: asyncHandler(async function ({ req }, args) {
-      isAuth(req);
+    resolve: asyncHandler(async function (parent, args, context, info) {
+      isAuth(context.authHeader);
       await hasRole("ADMIN_ROLE", req);
       const { authority } = args;
       const authorityEntity = await Authority.findOne({ where: { authority } });

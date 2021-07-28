@@ -18,9 +18,9 @@ module.exports = {
     args: {
       input: { type: inputCategoryType },
     },
-    resolve: asyncHandler(async function ({ req }, args) {
-      isAuth(req);
-      await hasRole("GUIDE_ROLE", req);
+    resolve: asyncHandler(async function (parent, args, context, info) {
+      isAuth(context.authHeader);
+      await hasRole("GUIDE_ROLE", context.authHeader);
 
       const { name } = args.input;
       const category = await Category.create({ name });

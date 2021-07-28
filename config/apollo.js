@@ -2,6 +2,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { GraphQLSchema } = require("graphql");
 const queryType = require("../graphql/query_type");
 const mutationType = require("../graphql/mutation_type");
+const { errorType } = require("./../error/graphql/error_constant");
 
 const schema = new GraphQLSchema({ query: queryType, mutation: mutationType });
 
@@ -13,9 +14,12 @@ module.exports = async (app) => {
       req,
       res,
     }),
-    customFormatErrorFn: (err) => {
-      const error = getError(err.message);
-      return { message: error.message, status: error.statusCode };
+    formatError: (err) => {
+      if (errorType[err.message]) {
+        const error = errorType[err.message];
+        return { message: error.message, status: error.statusCode };
+      }
+      return { message: err.message, extensions: err.extensions };
     },
   });
   await server.start();
