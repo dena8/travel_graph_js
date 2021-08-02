@@ -1,6 +1,6 @@
 const {GraphQLScalarType} = require('graphql');
 
-const Date = new GraphQLScalarType({
+module.exports = new GraphQLScalarType({
     name: 'Date',
     parseValue(value) {
       return new Date(value);
@@ -10,4 +10,3 @@ const Date = new GraphQLScalarType({
     },
 })
 
-module.exports = Date;
