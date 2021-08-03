@@ -1,6 +1,7 @@
 const { User, Authority } = require("../../../model/index");
 const initAuthorities = require("../../../util/initialAuthoritiesSetup");
 const dateScalarType = require("../../scalar_type/dateType");
+const asyncHandler = require("express-async-handler");
 
 const userResolver = {
   Date: dateScalarType,
@@ -22,24 +23,18 @@ const userResolver = {
     },
   },
   Mutation: {
-    addUser: async function (parent, args, context, info) {
-      const { username, password, email } = args.userInput;
-      if (await ((await Authority.count()) == 0)) {
-        initAuthorities();
-      }
+    updateAuthority: asyncHandler(async function (root, args, context, info) {
+      const { authority, username } = args.authorityInput;
+      const userAuthority = await Authority.findOne({ where: { authority } });
 
-      const authority =
-        (await User.count()) < 1
-          ? await Authority.findOne({ where: { Authority: "ADMIN_ROLE" } })
-          : await Authority.findOne({ where: { Authority: "USER_ROLE" } });
-
-      return await User.create({
-        username,
-        password,
-        email,
-        authorityId: authority.id,
-      });
-    },
+      const updated = await User.update(
+        { authorityId: userAuthority.id },
+        {
+          where: { username },
+        }
+      );
+      return !!updated;
+    }),
   },
 };
 

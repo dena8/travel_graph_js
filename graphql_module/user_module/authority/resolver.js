@@ -1,4 +1,4 @@
-const { Authority } = require('../../../model/index');
+const { Authority } = require("../../../model/index");
 
 module.exports = {
   Query: {

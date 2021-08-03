@@ -7,6 +7,13 @@ const schema = application.createSchemaForApollo();
 module.exports = async (app) => {
   const server = new ApolloServer({
     schema,
+    context: ({ req, res }) => {
+      return {
+        authHeader: req.headers.authorization,
+        req,
+        res,
+      };
+    },
   });
   await server.start();
   server.applyMiddleware({ app });

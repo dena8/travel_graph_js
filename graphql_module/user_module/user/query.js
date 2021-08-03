@@ -1,34 +1,29 @@
 const { gql } = require("graphql-modules");
 
-
-
 module.exports = gql`
-scalar Date
+  scalar Date
 
-type User {
-      id: ID!
-      username: String!
-      password: String! 
-      email: String
-      authority: Authority,     
-      createdAt: Date ,
-      updatedAt: Date
-     
-} 
-
-input InputUserType{
+  type User {
+    id: ID!
     username: String!
-    password: String! 
-    email: String!
-}
+    password: String!
+    email: String
+    authority: Authority
+    createdAt: Date
+    updatedAt: Date
+  }
 
-type Query{
-    users:[User]!
-    user(id:String): User
-}
+  input updateAuthorityType {
+    username: String!
+    authority: String!
+  }
 
-type Mutation{
-    addUser(userInput: InputUserType):User
-}
-   
+  type Query {
+    users: [User]!
+    user(id: String): User
+  }
+
+  type Mutation {
+    updateAuthority(authorityInput: updateAuthorityType): Boolean
+  }
 `;
