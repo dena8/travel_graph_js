@@ -1,7 +1,7 @@
 const { createModule } = require("graphql-modules");
 const { User, UserResolver } = require("./user/index");
 const { Authority, AuthorityResolver } = require("./authority/index");
-const { isAuth, hasRole } = require("../middleware/index");
+const { isAuth, hasRole } = require("../../graphql_common/middleware/index");
 const { authTypeDefs, authResolver } = require("./authentication/index");
 
 const userModule = createModule({

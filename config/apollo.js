@@ -13,7 +13,7 @@ module.exports = async (app) => {
         req,
         res,
       };
-    },
+    },   
   });
   await server.start();
   server.applyMiddleware({ app });

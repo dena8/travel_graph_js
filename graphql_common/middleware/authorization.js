@@ -1,5 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const {ForbiddenError}= require('apollo-server-core');
 
 module.exports = function (role) {
   return async function ({ root, args, context, info }, next) {
@@ -8,7 +9,7 @@ module.exports = function (role) {
     const decodeToken = await jwt.verify(token, process.env.TOKEN_SECRET);
 
     if (decodeToken.roles != role) {
-      throw new Error("Not authorized");
+      throw new ForbiddenError('Not authorized');
     }
     return next();
   };

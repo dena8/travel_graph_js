@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { User, Authority } = require("../../../model/index");
 const jwt = require("jsonwebtoken");
+const {AuthenticationError}= require('apollo-server-core');
+const initAuthorities = require('../../../util/initialAuthoritiesSetup');
 
 module.exports = {
   Query: {
@@ -9,11 +11,11 @@ module.exports = {
       const user = await User.findOne({ where: { username } });
 
       if (user == null) {
-        throw new Error("CREDENTIALS_ERROR");
+        throw new AuthenticationError('Invalid credentials');
       }
       const comparePass = await User.comparePassword(password, user);
       if (!comparePass) {
-        throw new Error("CREDENTIALS_ERROR");
+        throw new AuthenticationError('Invalid credentials')
       }
 
       const userAuthority = await Authority.findOne({

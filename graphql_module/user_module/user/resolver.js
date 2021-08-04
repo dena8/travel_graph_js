@@ -1,7 +1,7 @@
-const { User, Authority } = require("../../../model/index");
-const initAuthorities = require("../../../util/initialAuthoritiesSetup");
-const dateScalarType = require("../../scalar_type/dateType");
+const { User, Authority, Tour } = require("../../../model/index");
+const dateScalarType = require("../../../graphql_common/scalar_type/dateType");
 const asyncHandler = require("express-async-handler");
+const { orElse, NotFoundErr } = require("../../../graphql_common/error/index");
 
 const userResolver = {
   Date: dateScalarType,
@@ -19,13 +19,14 @@ const userResolver = {
           { model: Tour, as: "cart" },
         ],
       });
-      return user;
+      return user || orElse(NotFoundErr, "User not found");
     },
   },
   Mutation: {
     updateAuthority: asyncHandler(async function (root, args, context, info) {
       const { authority, username } = args.authorityInput;
-      const userAuthority = await Authority.findOne({ where: { authority } });
+      const userAuthority =
+        (await Authority.findOne({ where: { authority } })) || orElse(NotFoundErr, "Authority not found");
 
       const updated = await User.update(
         { authorityId: userAuthority.id },
@@ -33,7 +34,7 @@ const userResolver = {
           where: { username },
         }
       );
-      return !!updated;
+      return !!updated[0];
     }),
   },
 };
