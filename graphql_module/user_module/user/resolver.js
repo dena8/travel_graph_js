@@ -3,10 +3,12 @@ const dateScalarType = require("../../../graphql_common/scalar_type/dateType");
 const asyncHandler = require("express-async-handler");
 const { orElse, NotFoundErr } = require("../../../graphql_common/error/index");
 
+
 const userResolver = {
   Date: dateScalarType,
   Query: {
-    users: async () => {
+    users: async (root, args, context, info) => {
+    
       return await User.findAll({
         include: [{ model: Authority, as: "authority" }],
       });

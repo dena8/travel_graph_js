@@ -33,7 +33,7 @@ module.exports = {
     }),
   },
   Mutation: {
-    addUser: async function (root, args, context, info) {
+    addUser:asyncHandler( async function (root, args, context, info) {
       const { username, password, email } = args.userInput;
       if (await ((await Authority.count()) == 0)) {
         initAuthorities();
@@ -50,6 +50,6 @@ module.exports = {
         email,
         authorityId: authority.id,
       });
-    },
+    }),
   },
 };

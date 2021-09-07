@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -14,6 +15,7 @@ require("./scheduling/shcedule");
 require("./scheduling/clearLogs");
 
 require("./config/apollo")(app);
+
 
 app.use(Sentry.Handlers.errorHandler());
 

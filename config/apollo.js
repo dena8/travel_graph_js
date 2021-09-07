@@ -1,3 +1,4 @@
+require('reflect-metadata');
 const { ApolloServer } = require("apollo-server-express");
 
 const application = require("../graphql_module/app_module");
