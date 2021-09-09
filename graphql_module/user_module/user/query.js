@@ -11,6 +11,7 @@ module.exports = gql`
     authority: Authority
     createdAt: Date
     updatedAt: Date
+    cart:[Tour]! 
   }
 
   input updateAuthorityType {

@@ -1,7 +1,7 @@
 const { gql } = require("graphql-modules");
 
 module.exports = gql`
-  input loginInputType {
+  input LoginInputType {
     username: String!
     password: String!
   }
@@ -13,7 +13,7 @@ module.exports = gql`
   }
 
   extend type Query {
-    login(loginInput: loginInputType): User
+    login(loginInput: LoginInputType): User
   }
 
   extend type Mutation {
